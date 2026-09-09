@@ -337,14 +337,14 @@ export default function App() {
         />
       </div>
 
-      {/* Voice Assistant Toast notification */}
-      <VoiceAssistToast
+      {/* Voice Assistant Toast notification — DISABLED */}
+      {/* <VoiceAssistToast
         isActive={voiceToast.show}
         messageMr={voiceToast.mr}
         messageEn={voiceToast.en}
         language={language}
         onClose={() => setVoiceToast((prev) => ({ ...prev, show: false }))}
-      />
+      /> */}
 
       {/* Main Container */}
       <main

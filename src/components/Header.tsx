@@ -92,20 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Action Controls */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Audio / Voice Guidance Toggle */}
-          <button
-            onClick={onToggleVoice}
-            title={language === 'hi' ? 'आवाज सहायक' : language === 'mr' ? 'आवाज सहाय्यक' : 'Voice Assistant'}
-            className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all ${
-              isVoiceActive
-                ? 'bg-primary text-on-primary shadow-sm scale-105'
-                : 'bg-surface-container text-on-surface-variant hover:text-primary hover:bg-surface-container-high'
-            }`}
-          >
-            <span className="material-symbols-outlined text-[18px] sm:text-[20px]">
-              {isVoiceActive ? 'volume_up' : 'volume_mute'}
-            </span>
-          </button>
+
 
           {/* 3-Language Selector: Marathi | Hindi | English */}
           <div className="h-9 p-0.5 rounded-full bg-surface-container flex items-center border border-outline-variant/30 shadow-2xs">
