@@ -1,0 +1,6 @@
+{
+  "name": "KisanProcure",
+  "description": "राष्ट्रीय शेती खरेदी पोर्टल - Smart Agri-Procurement, Live APMC Mandi Queue & DBT Tracking System",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
