@@ -1,173 +1,106 @@
-import React from 'react';
-import { Language, FarmerProfile, AuthUser } from '../types';
+"use client";
 
-interface HeaderProps {
-  language: Language;
-  onToggleLanguage: () => void;
-  onChangeLanguage?: (lang: Language) => void;
-  farmer: FarmerProfile;
-  currentUser?: AuthUser | null;
-  onLogout?: () => void;
-  onOpenHelpline: () => void;
-  onOpenProfile: () => void;
-  isVoiceActive: boolean;
-  onToggleVoice: () => void;
-}
+import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Wheat, Globe, Sparkles, SlidersHorizontal, Bell } from "lucide-react";
+import { useDemo } from "@/context/DemoContext";
 
-export const Header: React.FC<HeaderProps> = ({
-  language,
-  onToggleLanguage,
-  onChangeLanguage,
-  farmer,
-  currentUser,
-  onLogout,
-  onOpenHelpline,
-  onOpenProfile,
-  isVoiceActive,
-  onToggleVoice,
-}) => {
+export const Header: React.FC = () => {
+  const pathname = usePathname();
+  const { state, setLanguage, unreadCount } = useDemo();
+
   return (
-    <header className="fixed top-0 inset-x-0 z-50 pt-safe bg-[#faf8ff]/95 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-all">
-      {/* Indian National Tricolor Strip */}
-      <div className="w-full flex h-1">
-        <div className="w-1/3 bg-[#FF9933]" />
-        <div className="w-1/3 bg-white" />
-        <div className="w-1/3 bg-[#138808]" />
-      </div>
-
-      <div className="h-20 max-w-5xl mx-auto px-4 flex items-center justify-between gap-2">
-        {/* Logo & Portal Brand */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={onOpenProfile}>
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-primary-container/10 p-1">
-            <img
-              alt="KisanProcure Emblem"
-              className="h-8 w-auto object-contain"
-              src="https://lh3.googleusercontent.com/aida/AEtjO1XptYHln5JukRlSLgfYNn-5e-bMjHlFVatCjC3T0veSqbZjB658G7-yBi1X5wY2hdmjmDfaM4at6Imaby8o69WOoG7XzvNg-OMwX3dqLwqQD4GDXe5CJszGl4TNqgfkpyezGyNS4fWUA59P5dFBpWv7iJrPfiOTaCMp40e-ucWk4wfUIfu8Ju5TFgQmsvb6C0ZGVyIcoNOgLCOV8bkpLlBRDE3MEc1rYdNtzAfv9m4eHJqT7onRfZf_bS0"
-              onError={(e) => {
-                // Fallback SVG leaf if offline
-                (e.target as HTMLElement).style.display = 'none';
-              }}
-            />
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200">
+      <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+        {/* Brand */}
+        <Link href="/home" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded-lg bg-amber-400 text-slate-950 flex items-center justify-center font-black border border-amber-500/50 shadow-xs">
+            <Wheat className="w-5 h-5 text-slate-900" />
           </div>
-          <div className="flex flex-col">
+          <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-headline text-lg text-primary tracking-tight font-extrabold leading-none">
+              <span className="font-extrabold text-base tracking-tight text-slate-900">
                 KisanProcure
               </span>
-              {currentUser && (
-                <span
-                  className={`text-[9px] font-bold px-1.5 py-0.2 rounded font-mono uppercase hidden sm:inline ${
-                    currentUser.role === 'admin'
-                      ? 'bg-slate-800 text-white'
-                      : currentUser.role === 'operator'
-                      ? 'bg-emerald-700 text-white'
-                      : 'bg-green-100 text-green-800'
-                  }`}
-                >
-                  {currentUser.role === 'admin'
-                    ? 'DoCA प्रशासन'
-                    : currentUser.role === 'operator'
-                    ? language === 'hi'
-                      ? 'केंद्र ऑपरेटर'
-                      : language === 'mr'
-                      ? 'काटा ऑपरेटर'
-                      : 'APMC Operator'
-                    : language === 'hi'
-                    ? 'किसान'
-                    : language === 'mr'
-                    ? 'शेतकरी'
-                    : 'Farmer'}
-                </span>
-              )}
+              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-sm bg-amber-100 text-amber-900 border border-amber-300">
+                Demo Mode
+              </span>
             </div>
-            <span className="text-[11px] text-on-surface-variant leading-tight font-medium">
-              {language === 'hi'
-                ? 'राष्ट्रीय कृषि खरीद पोर्टल'
-                : language === 'mr'
-                ? 'राष्ट्रीय शेती खरेदी पोर्टल'
-                : 'National Agri-Procurement Portal'}
-            </span>
+            <p className="text-[10px] text-slate-500 font-medium -mt-0.5 hidden sm:block">
+              Smart Procurement & Queue Management
+            </p>
           </div>
-        </div>
+        </Link>
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-
-
-          {/* 3-Language Selector: Marathi | Hindi | English */}
-          <div className="h-9 p-0.5 rounded-full bg-surface-container flex items-center border border-outline-variant/30 shadow-2xs">
+        {/* Right actions */}
+        <div className="flex items-center gap-2">
+          {/* Language Selector */}
+          <div className="flex items-center bg-slate-100 rounded-lg p-0.5 border border-slate-200 text-xs">
+            <Globe className="w-3.5 h-3.5 text-slate-500 ml-1.5 mr-1" />
             <button
-              onClick={() => (onChangeLanguage ? onChangeLanguage('mr') : onToggleLanguage())}
-              className={`px-2 py-1 rounded-full text-[11px] font-bold transition-all ${
-                language === 'mr'
-                  ? 'bg-primary text-on-primary shadow-2xs'
-                  : 'text-on-surface-variant hover:text-on-surface'
+              onClick={() => setLanguage("en")}
+              className={`px-1.5 py-0.5 rounded text-xs font-semibold transition-colors ${
+                state.language === "en"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
-              title="मराठी (Marathi)"
-            >
-              म
-            </button>
-            <button
-              onClick={() => (onChangeLanguage ? onChangeLanguage('hi') : onToggleLanguage())}
-              className={`px-2 py-1 rounded-full text-[11px] font-bold transition-all ${
-                language === 'hi'
-                  ? 'bg-primary text-on-primary shadow-2xs'
-                  : 'text-on-surface-variant hover:text-on-surface'
-              }`}
-              title="हिंदी (Hindi)"
-            >
-              हिं
-            </button>
-            <button
-              onClick={() => (onChangeLanguage ? onChangeLanguage('en') : onToggleLanguage())}
-              className={`px-2 py-1 rounded-full text-[11px] font-bold transition-all ${
-                language === 'en'
-                  ? 'bg-primary text-on-primary shadow-2xs'
-                  : 'text-on-surface-variant hover:text-on-surface'
-              }`}
-              title="English"
             >
               EN
             </button>
+            <button
+              onClick={() => setLanguage("mr")}
+              className={`px-1.5 py-0.5 rounded text-xs font-semibold transition-colors ${
+                state.language === "mr"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              मराठी
+            </button>
+            <button
+              onClick={() => setLanguage("hi")}
+              className={`px-1.5 py-0.5 rounded text-xs font-semibold transition-colors ${
+                state.language === "hi"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              हिन्दी
+            </button>
           </div>
 
-          {/* Emergency Kisan Helpline */}
-          <button
-            onClick={onOpenHelpline}
-            aria-label="Emergency Kisan Helpline"
-            title={language === 'hi' ? 'किसान सहायता केंद्र' : language === 'mr' ? 'शेतकरी मदत कक्ष' : 'Farmer Helpline'}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center hover:bg-error hover:text-on-error active:scale-95 transition-colors shadow-xs"
+          {/* Presentation Mode quick button for judges */}
+          <Link
+            href="/presentation"
+            className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 transition-colors"
           >
-            <span className="material-symbols-outlined text-[18px] sm:text-[20px]">call</span>
-          </button>
+            <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+            <span>Judge Demo</span>
+          </Link>
 
-          {/* Farmer Profile Avatar */}
-          <button
-            onClick={onOpenProfile}
-            title={currentUser ? (language === 'hi' ? currentUser.nameHi || currentUser.nameMr : currentUser.nameMr) : farmer.nameMr}
-            className="relative flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-primary active:scale-95 transition-transform"
+          {/* Notifications */}
+          <Link
+            href="/notifications"
+            className="relative p-2 rounded-lg text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors"
+            title="Notifications"
           >
-            <img
-              alt={currentUser ? currentUser.nameMr : farmer.nameMr}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover ring-1 ring-outline-variant"
-              src={currentUser?.avatarUrl || farmer.avatarUrl}
-            />
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-surface" />
-          </button>
-
-          {/* Quick Logout Button */}
-          {onLogout && (
-            <button
-              onClick={onLogout}
-              title={language === 'hi' ? 'लॉगआउट / खाता बदलें' : language === 'mr' ? 'लॉगआउट / खाते बदला' : 'Logout / Switch Account'}
-              className="h-9 px-2 rounded-xl bg-surface-container hover:bg-red-50 hover:text-red-700 text-on-surface-variant flex items-center gap-1 text-xs font-bold transition-all"
-            >
-              <span className="material-symbols-outlined text-[16px]">logout</span>
-              <span className="hidden md:inline">
-                {language === 'hi' ? 'लॉगआउट' : language === 'mr' ? 'लॉगआउट' : 'Logout'}
+            <Bell className="w-4 h-4" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] flex items-center justify-center border border-white">
+                {unreadCount}
               </span>
-            </button>
-          )}
+            )}
+          </Link>
+
+          {/* Demo Controls */}
+          <Link
+            href="/demo-controls"
+            className="p-2 rounded-lg text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors"
+            title="Demo Controls"
+          >
+            <SlidersHorizontal className="w-4 h-4 text-slate-700" />
+          </Link>
         </div>
       </div>
     </header>
