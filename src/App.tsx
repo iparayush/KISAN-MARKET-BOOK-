@@ -59,8 +59,57 @@ export default function App() {
     return 'en';
   });
   
-  // Authenticated user session persisted in localStorage
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const roleParam = urlParams?.get('role') as UserRole | null;
+  const tabParam = urlParams?.get('tab') as ScreenTab | null;
+  const modalParam = urlParams?.get('modal');
+  const viewParam = urlParams?.get('view');
+
+  // Authenticated user session persisted in localStorage, or overridden by URL params
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => {
+    if (viewParam === 'login') return null;
+    if (roleParam === 'operator') {
+      return {
+        id: 'OPR-NSK-042',
+        role: 'operator',
+        nameMr: 'विशाल जाधव (काटा ऑपरेटर)',
+        nameEn: 'Vishal Jadhav (Weighbridge Operator)',
+        identifier: 'OPR-NSK-042',
+        centreId: 'nashik-main',
+        centreNameMr: 'नाशिक कृषी उत्पन्न बाजार समिती (APMC) - काटा क्र. २',
+        centreNameEn: 'Nashik APMC Market - Weighbridge #2',
+        designationMr: 'वरिष्ठ वजन काटा व प्रतवारी ऑपरेटर',
+        designationEn: 'Senior Weighbridge & Grading Officer',
+        loginTime: new Date().toLocaleTimeString(),
+      };
+    }
+    if (roleParam === 'admin') {
+      return {
+        id: 'DOCA-HQ-9901',
+        role: 'admin',
+        nameMr: 'डॉ. आनंद सावंत (भा.प्र.से.)',
+        nameEn: 'Dr. Anand Sawant (IAS)',
+        identifier: 'DOCA-HQ-9901',
+        designationMr: 'संचालक, ग्राहक व्यवहार विभाग (DoCA)',
+        designationEn: 'Director, Dept of Consumer Affairs (DoCA)',
+        loginTime: new Date().toLocaleTimeString(),
+      };
+    }
+    if (roleParam === 'farmer' || tabParam || modalParam) {
+      return {
+        id: 'FMR-88291',
+        role: 'farmer',
+        nameMr: INITIAL_FARMER.nameMr,
+        nameEn: INITIAL_FARMER.nameEn,
+        identifier: 'MH-NSK-88291',
+        phone: INITIAL_FARMER.phone,
+        avatarUrl: INITIAL_FARMER.avatarUrl,
+        centreNameMr: 'नाशिक कृषी उत्पन्न बाजार समिती (APMC)',
+        centreNameEn: 'Nashik APMC Agricultural Market',
+        tokenNumber: '#027',
+        loginTime: new Date().toLocaleTimeString(),
+      };
+    }
     try {
       const saved = localStorage.getItem('kisanprocure_auth_user');
       if (saved) {
@@ -73,10 +122,14 @@ export default function App() {
   });
 
   const [userRole, setUserRole] = useState<UserRole>(() => {
+    if (roleParam) return roleParam;
     return currentUser?.role || 'farmer';
   });
 
-  const [currentTab, setCurrentTab] = useState<ScreenTab>('home');
+  const [currentTab, setCurrentTab] = useState<ScreenTab>(() => {
+    if (tabParam) return tabParam;
+    return 'home';
+  });
 
   // Shared synchronized states across Farmer, Operator, and Admin
   const [farmer] = useState(INITIAL_FARMER);
@@ -90,9 +143,9 @@ export default function App() {
   const [adminAlerts] = useState<AdminAlert[]>(ADMIN_ALERTS);
 
   // Modals state
-  const [isCropRegisterOpen, setIsCropRegisterOpen] = useState(false);
+  const [isCropRegisterOpen, setIsCropRegisterOpen] = useState(() => modalParam === 'crop-register');
   const [isMandiFinderOpen, setIsMandiFinderOpen] = useState(false);
-  const [isGatePassOpen, setIsGatePassOpen] = useState(false);
+  const [isGatePassOpen, setIsGatePassOpen] = useState(() => modalParam === 'gate-pass' || modalParam === 'token');
   const [isDirectionsOpen, setIsDirectionsOpen] = useState(false);
   const [isHelplineOpen, setIsHelplineOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
