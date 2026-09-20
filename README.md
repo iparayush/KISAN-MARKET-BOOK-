@@ -142,64 +142,67 @@ The application includes 24 fully connected routes:
 
 ```
 kisanprocure/
-├── .env.example
-├── .gitignore
-├── next.config.ts
-├── package.json
-├── postcss.config.mjs
+├── package.json           # Monorepo scripts (delegates to frontend & backend)
 ├── README.md
-├── tsconfig.json
-├── public/
-└── src/
-    ├── app/
-    │   ├── globals.css
-    │   ├── layout.tsx
-    │   ├── page.tsx               # Landing screen
-    │   ├── about/page.tsx
-    │   ├── arrival/page.tsx
-    │   ├── bill/page.tsx
-    │   ├── booking/page.tsx
-    │   ├── bookings/page.tsx
-    │   ├── centres/page.tsx
-    │   ├── crop/page.tsx
-    │   ├── demo-controls/page.tsx
-    │   ├── help/page.tsx
-    │   ├── history/page.tsx
-    │   ├── home/page.tsx
-    │   ├── login/page.tsx
-    │   ├── notifications/page.tsx
-    │   ├── payment/page.tsx
-    │   ├── presentation/page.tsx
-    │   ├── procurement/page.tsx
-    │   ├── profile/page.tsx
-    │   ├── quality/page.tsx
-    │   ├── queue/page.tsx
-    │   ├── slots/page.tsx
-    │   ├── token/page.tsx
-    │   ├── verification/page.tsx
-    │   ├── weighing/page.tsx
-    │   └── workflow/page.tsx
-    ├── components/
-    │   ├── AppShell.tsx           # Responsive container, desktop sidebar, mobile nav
-    │   ├── BookingCard.tsx
-    │   ├── BottomNavigation.tsx   # Mobile 5-tab bar (HOME, BOOK, QUEUE, TRACK, MORE)
-    │   ├── CentreCard.tsx
-    │   ├── DisclaimerBanner.tsx   # "Functional Demo Prototype" notice
-    │   ├── EmptyState.tsx
-    │   ├── Header.tsx             # Brand header, Demo Mode badge, language switcher
-    │   ├── PageHeader.tsx
-    │   ├── PrimaryButton.tsx      # Accessible >= 44px buttons
-    │   ├── ProcurementTimeline.tsx # 9-stage interactive lifecycle stepper
-    │   ├── QueueCard.tsx          # Real-time token queue with visual sequence ribbon
-    │   ├── SlotCard.tsx
-    │   ├── StatusBadge.tsx
-    │   └── TokenCard.tsx          # Visual entry token pass
-    ├── context/
-    │   └── DemoContext.tsx        # Centralized state provider & auto-demo timer
-    ├── data/
-    │   └── demoData.ts            # Canonical seed data, stages, centres, and dictionaries
-    └── lib/
-        └── demoEngine.ts          # Pure state transformations & billing calculators
+├── frontend/              # Next.js 16 + React 19 Frontend Web Application
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── next.config.ts
+│   ├── package.json
+│   ├── postcss.config.mjs
+│   ├── tsconfig.json
+│   ├── public/
+│   └── src/
+│       ├── app/
+│       │   ├── globals.css
+│       │   ├── layout.tsx
+│       │   ├── page.tsx               # Landing screen
+│       │   ├── about/page.tsx
+│       │   ├── arrival/page.tsx
+│       │   ├── bill/page.tsx
+│       │   ├── booking/page.tsx
+│       │   ├── bookings/page.tsx
+│       │   ├── centres/page.tsx
+│       │   ├── crop/page.tsx
+│       │   ├── demo-controls/page.tsx
+│       │   ├── help/page.tsx
+│       │   ├── history/page.tsx
+│       │   ├── home/page.tsx
+│       │   ├── login/page.tsx
+│       │   ├── notifications/page.tsx
+│       │   ├── payment/page.tsx
+│       │   ├── presentation/page.tsx
+│       │   ├── procurement/page.tsx
+│       │   ├── profile/page.tsx
+│       │   ├── quality/page.tsx
+│       │   ├── queue/page.tsx
+│       │   ├── slots/page.tsx
+│       │   ├── token/page.tsx
+│       │   ├── verification/page.tsx
+│       │   ├── weighing/page.tsx
+│       │   └── workflow/page.tsx
+│       ├── components/
+│       │   ├── AppShell.tsx           # Responsive container, desktop sidebar, mobile nav
+│       │   ├── BookingCard.tsx
+│       │   ├── BottomNavigation.tsx   # Mobile 5-tab bar (HOME, BOOK, QUEUE, TRACK, MORE)
+│       │   ├── CentreCard.tsx
+│       │   ├── DisclaimerBanner.tsx   # "Functional Demo Prototype" notice
+│       │   ├── EmptyState.tsx
+│       │   ├── Header.tsx             # Brand header, Demo Mode badge, language switcher
+│       │   ├── PageHeader.tsx
+│       │   ├── PrimaryButton.tsx      # Accessible >= 44px buttons
+│       │   ├── ProcurementTimeline.tsx # 9-stage interactive lifecycle stepper
+│       │   ├── QueueCard.tsx          # Real-time token queue with visual sequence ribbon
+│       │   ├── SlotCard.tsx
+│       │   ├── StatusBadge.tsx
+│       │   └── TokenCard.tsx          # Visual entry token pass
+│       ├── context/
+│       │   └── DemoContext.tsx        # Centralized state provider & auto-demo timer
+│       ├── data/
+│       │   └── demoData.ts            # Canonical seed data, stages, centres, and dictionaries
+│       └── lib/
+│           └── demoEngine.ts          # Pure state transformations & billing calculators
+└── backend/               # Node.js + Express API Service
 ```
 
 ---
@@ -213,18 +216,21 @@ Ensure you have **Node.js v18.18+** or **Node.js v20+** installed:
 git clone https://github.com/iparayush/KISAN-MARKET-BOOK-.git
 cd kisanprocure
 
-# Install dependencies
+# Install dependencies for both root and frontend
 npm install
+npm --prefix frontend install
 ```
 
 ---
 
 ## 9. Development
 
-To start the local development server:
+To start the local development server from root:
 
 ```bash
 npm run dev
+# or
+npm --prefix frontend run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -237,30 +243,34 @@ To build the optimized static production bundle:
 
 ```bash
 npm run build
+# or
+npm --prefix frontend run build
 ```
 
 To run the production server locally:
 
 ```bash
 npm start
+# or
+npm --prefix frontend run start
 ```
 
 ---
 
 ## 11. Vercel Deployment
 
-This project is tailored for seamless zero-configuration deployment on **Vercel**:
+This project supports seamless deployment on **Vercel**:
 
-1. Push this repository to GitHub: `https://github.com/iparayush/KISAN-MARKET-BOOK-.git`
-2. Log in to [Vercel](https://vercel.com) and click **"Add New Project"**.
-3. Import the `KISAN-MARKET-BOOK-` repository.
-4. Leave all build settings to defaults:
-   - **Framework Preset:** Next.js
-   - **Build Command:** `next build` (or `npm run build`)
-   - **Output Directory:** `.next`
-   - **Install Command:** `npm install`
-5. No Environment Variables or database connections are required for demo mode.
-6. Click **Deploy**. Your live demo URL will be provisioned in ~60 seconds.
+### Option A: Set Root Directory to `frontend` (Recommended on Vercel)
+1. In Vercel, import the repository `https://github.com/iparayush/KISAN-MARKET-BOOK-.git`.
+2. Under **Root Directory**, click **Edit** and choose `frontend`.
+3. Framework Preset will auto-detect as **Next.js**.
+4. Click **Deploy**.
+
+### Option B: Deploy from Repository Root
+1. Leave **Root Directory** as `./`.
+2. Vercel automatically runs `npm run build` which delegates to `npm --prefix frontend run build`.
+3. Click **Deploy**.
 
 ---
 

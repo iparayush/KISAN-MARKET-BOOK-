@@ -1,18 +1,13 @@
 {
-  "name": "kisanprocure-workspace",
+  "name": "kisanprocure-frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npm --prefix frontend run dev",
-    "dev:frontend": "npm --prefix frontend run dev",
-    "build": "npm --prefix frontend run build",
-    "build:frontend": "npm --prefix frontend run build",
-    "start": "npm --prefix frontend run start",
-    "lint": "npm --prefix frontend run lint",
-    "dev:backend": "npm --prefix backend run dev",
-    "start:backend": "npm --prefix backend start",
-    "seed:backend": "npm --prefix backend run seed"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
